@@ -1,0 +1,6 @@
+# JEPA vs direct experiment (jepa/). Install on top of requirements.txt.
+# Versions used for the reported results (macOS, Apple MPS, Python 3.11.14).
+torch==2.14.1
+transformers==5.20.2
+sentence-transformers==6.1.0
+scikit-learn==1.9.1

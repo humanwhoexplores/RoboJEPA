@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# RoboJEPA: generated data and local artifacts (dataset is published as a GitHub release)
+data/*/
+features.npz
+*.npz
+*.zip
+.DS_Store

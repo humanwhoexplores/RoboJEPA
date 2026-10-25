@@ -1,0 +1,54 @@
+{
+  "seed": 590,
+  "n_scenes": 80,
+  "candidate_types": [
+    "ideal_left",
+    "ideal_right",
+    "short_left",
+    "short_right",
+    "over_left",
+    "over_right",
+    "miss",
+    "random"
+  ],
+  "split_p": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "cube_x": [
+    -0.06,
+    0.06
+  ],
+  "cube_y": [
+    -0.05,
+    0.05
+  ],
+  "reserved_x": [
+    0.03,
+    0.06
+  ],
+  "noise": {
+    "theta": 0.12,
+    "dist_frac": 0.1,
+    "offset": 0.01
+  },
+  "image_size": 224,
+  "camera": "pushview",
+  "targets": {
+    "left": [
+      0.0,
+      -0.15
+    ],
+    "right": [
+      0.0,
+      0.15
+    ]
+  },
+  "target_radius": 0.06,
+  "cube_half": 0.02,
+  "settle_steps": 20,
+  "check_steps": 10,
+  "mujoco": "3.3.7",
+  "robosuite": "1.5.2"
+}
