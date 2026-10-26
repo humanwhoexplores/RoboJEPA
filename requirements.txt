@@ -1,0 +1,6 @@
+# robosuite 1.5.2 breaks on mujoco >= 3.4 (bare AssertionError in get_joint_qpos_addr), so pin mujoco.
+mujoco==3.3.7
+robosuite==1.5.2
+numpy<2  # tested with 1.26.4
+pandas
+pillow

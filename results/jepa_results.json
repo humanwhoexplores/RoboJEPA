@@ -1,0 +1,516 @@
+{
+  "config": {
+    "data": "data/v1",
+    "seeds": 3,
+    "width": 128,
+    "epochs_pred": 100,
+    "epochs_cls": 40,
+    "device": "auto",
+    "encoder": "dinov2-small",
+    "text_encoder": "all-MiniLM-L6-v2"
+  },
+  "seeds": [
+    {
+      "val": {
+        "n_decisions": 48,
+        "direct": 0.7083333333333334,
+        "direct_auroc": 0.9111362493715436,
+        "jepa": 0.875,
+        "jepa_auroc": 0.8962208815149992,
+        "jepa_oracle": 0.9583333333333334,
+        "jepa_oracle_auroc": 0.9995810289927938,
+        "state_ref": 0.875,
+        "state_ref_auroc": 0.9322942852354617,
+        "random": 0.203125,
+        "best_possible": 0.9583333333333334,
+        "by_kind_position": {
+          "n_decisions": 24,
+          "direct": 0.75,
+          "direct_auroc": 0.9316239316239316,
+          "jepa": 0.9166666666666666,
+          "jepa_auroc": 0.9162057985587397,
+          "jepa_oracle": 0.9583333333333334,
+          "jepa_oracle_auroc": 1.0,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9322942852354617,
+          "random": 0.203125,
+          "best_possible": 0.9583333333333334
+        },
+        "by_kind_color": {
+          "n_decisions": 24,
+          "direct": 0.6666666666666666,
+          "direct_auroc": 0.8784984079101726,
+          "jepa": 0.8333333333333334,
+          "jepa_auroc": 0.8805094687447629,
+          "jepa_oracle": 0.9583333333333334,
+          "jepa_oracle_auroc": 0.9991620579855874,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9322942852354617,
+          "random": 0.203125,
+          "best_possible": 0.9583333333333334
+        },
+        "latency_ms_per_decision": {
+          "direct": 7.492186996387318,
+          "jepa": 12.614187493454665
+        },
+        "predictor_mse": 0.10201647877693176,
+        "copy_initial_mse": 0.27831000089645386,
+        "predictor_cos": 0.9440348744392395,
+        "copy_initial_cos": 0.8568823337554932
+      },
+      "test": {
+        "n_decisions": 52,
+        "direct": 0.36538461538461536,
+        "direct_auroc": 0.7188240872451399,
+        "jepa": 0.5961538461538461,
+        "jepa_auroc": 0.8622965070333491,
+        "jepa_oracle": 0.6730769230769231,
+        "jepa_oracle_auroc": 0.9631737000158053,
+        "state_ref": 0.7307692307692307,
+        "state_ref_auroc": 0.9328275644065118,
+        "random": 0.1778846153846154,
+        "best_possible": 0.8846153846153846,
+        "by_kind_position": {
+          "n_decisions": 26,
+          "direct": 0.34615384615384615,
+          "direct_auroc": 0.7434803224276909,
+          "jepa": 0.4230769230769231,
+          "jepa_auroc": 0.847321005215742,
+          "jepa_oracle": 0.46153846153846156,
+          "jepa_oracle_auroc": 0.9171803382329698,
+          "state_ref": 0.7307692307692307,
+          "state_ref_auroc": 0.9328275644065118,
+          "random": 0.1778846153846154,
+          "best_possible": 0.8846153846153846
+        },
+        "by_kind_color": {
+          "n_decisions": 26,
+          "direct": 0.38461538461538464,
+          "direct_auroc": 0.6990674885411727,
+          "jepa": 0.7692307692307693,
+          "jepa_auroc": 0.8730836099257152,
+          "jepa_oracle": 0.8846153846153846,
+          "jepa_oracle_auroc": 0.994626205152521,
+          "state_ref": 0.7307692307692307,
+          "state_ref_auroc": 0.9328275644065118,
+          "random": 0.1778846153846154,
+          "best_possible": 0.8846153846153846
+        },
+        "by_reserved_band": {
+          "n_decisions": 20,
+          "direct": 0.3,
+          "direct_auroc": 0.667948717948718,
+          "jepa": 0.5,
+          "jepa_auroc": 0.8258974358974359,
+          "jepa_oracle": 0.7,
+          "jepa_oracle_auroc": 0.9392307692307693,
+          "state_ref": 0.5,
+          "state_ref_auroc": 0.9158974358974359,
+          "random": 0.1875,
+          "best_possible": 0.9
+        },
+        "by_regular_band": {
+          "n_decisions": 32,
+          "direct": 0.40625,
+          "direct_auroc": 0.7557890222984562,
+          "jepa": 0.65625,
+          "jepa_auroc": 0.8827186963979418,
+          "jepa_oracle": 0.65625,
+          "jepa_oracle_auroc": 0.9742710120068611,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9493996569468267,
+          "random": 0.171875,
+          "best_possible": 0.875
+        },
+        "latency_ms_per_decision": {
+          "direct": 7.614041503984481,
+          "jepa": 12.283229501917958
+        },
+        "predictor_mse": 0.11665629595518112,
+        "copy_initial_mse": 0.27735644578933716,
+        "predictor_cos": 0.9350309371948242,
+        "copy_initial_cos": 0.8569917678833008
+      }
+    },
+    {
+      "val": {
+        "n_decisions": 48,
+        "direct": 0.8125,
+        "direct_auroc": 0.9344310373722138,
+        "jepa": 0.8958333333333334,
+        "jepa_auroc": 0.8818920730685438,
+        "jepa_oracle": 0.9583333333333334,
+        "jepa_oracle_auroc": 0.9999581028992793,
+        "state_ref": 0.875,
+        "state_ref_auroc": 0.9322942852354617,
+        "random": 0.203125,
+        "best_possible": 0.9583333333333334,
+        "by_kind_position": {
+          "n_decisions": 24,
+          "direct": 0.8333333333333334,
+          "direct_auroc": 0.9527400703871292,
+          "jepa": 0.9166666666666666,
+          "jepa_auroc": 0.8875481816658288,
+          "jepa_oracle": 0.9583333333333334,
+          "jepa_oracle_auroc": 1.0,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9322942852354617,
+          "random": 0.203125,
+          "best_possible": 0.9583333333333334
+        },
+        "by_kind_color": {
+          "n_decisions": 24,
+          "direct": 0.7916666666666666,
+          "direct_auroc": 0.9160382101558572,
+          "jepa": 0.875,
+          "jepa_auroc": 0.8738059326294622,
+          "jepa_oracle": 0.9583333333333334,
+          "jepa_oracle_auroc": 0.9998324115971176,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9322942852354617,
+          "random": 0.203125,
+          "best_possible": 0.9583333333333334
+        },
+        "latency_ms_per_decision": {
+          "direct": 6.358021026244387,
+          "jepa": 10.228583501884714
+        },
+        "predictor_mse": 0.10178229957818985,
+        "copy_initial_mse": 0.27831000089645386,
+        "predictor_cos": 0.9444077610969543,
+        "copy_initial_cos": 0.8568823337554932
+      },
+      "test": {
+        "n_decisions": 52,
+        "direct": 0.5,
+        "direct_auroc": 0.7727991149043781,
+        "jepa": 0.5961538461538461,
+        "jepa_auroc": 0.8309625414888574,
+        "jepa_oracle": 0.6153846153846154,
+        "jepa_oracle_auroc": 0.9541251778093884,
+        "state_ref": 0.7307692307692307,
+        "state_ref_auroc": 0.9328275644065118,
+        "random": 0.1778846153846154,
+        "best_possible": 0.8846153846153846,
+        "by_kind_position": {
+          "n_decisions": 26,
+          "direct": 0.5384615384615384,
+          "direct_auroc": 0.7929508455824246,
+          "jepa": 0.5384615384615384,
+          "jepa_auroc": 0.8482693219535324,
+          "jepa_oracle": 0.46153846153846156,
+          "jepa_oracle_auroc": 0.9250829777145567,
+          "state_ref": 0.7307692307692307,
+          "state_ref_auroc": 0.9328275644065118,
+          "random": 0.1778846153846154,
+          "best_possible": 0.8846153846153846
+        },
+        "by_kind_color": {
+          "n_decisions": 26,
+          "direct": 0.46153846153846156,
+          "direct_auroc": 0.7509088035403825,
+          "jepa": 0.6538461538461539,
+          "jepa_auroc": 0.8146040777619725,
+          "jepa_oracle": 0.7692307692307693,
+          "jepa_oracle_auroc": 0.9819819819819819,
+          "state_ref": 0.7307692307692307,
+          "state_ref_auroc": 0.9328275644065118,
+          "random": 0.1778846153846154,
+          "best_possible": 0.8846153846153846
+        },
+        "by_reserved_band": {
+          "n_decisions": 20,
+          "direct": 0.4,
+          "direct_auroc": 0.7310256410256409,
+          "jepa": 0.45,
+          "jepa_auroc": 0.8097435897435896,
+          "jepa_oracle": 0.55,
+          "jepa_oracle_auroc": 0.9366666666666668,
+          "state_ref": 0.5,
+          "state_ref_auroc": 0.9158974358974359,
+          "random": 0.1875,
+          "best_possible": 0.9
+        },
+        "by_regular_band": {
+          "n_decisions": 32,
+          "direct": 0.5625,
+          "direct_auroc": 0.8022084048027445,
+          "jepa": 0.6875,
+          "jepa_auroc": 0.8462692967409948,
+          "jepa_oracle": 0.65625,
+          "jepa_oracle_auroc": 0.9644082332761578,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9493996569468267,
+          "random": 0.171875,
+          "best_possible": 0.875
+        },
+        "latency_ms_per_decision": {
+          "direct": 6.883292022394016,
+          "jepa": 10.923750000074506
+        },
+        "predictor_mse": 0.11673256009817123,
+        "copy_initial_mse": 0.27735644578933716,
+        "predictor_cos": 0.9350770115852356,
+        "copy_initial_cos": 0.8569917678833008
+      }
+    },
+    {
+      "val": {
+        "n_decisions": 48,
+        "direct": 0.7916666666666666,
+        "direct_auroc": 0.9162476956594604,
+        "jepa": 0.8333333333333334,
+        "jepa_auroc": 0.8983157365510307,
+        "jepa_oracle": 0.9583333333333334,
+        "jepa_oracle_auroc": 0.9995810289927937,
+        "state_ref": 0.875,
+        "state_ref_auroc": 0.9322942852354617,
+        "random": 0.203125,
+        "best_possible": 0.9583333333333334,
+        "by_kind_position": {
+          "n_decisions": 24,
+          "direct": 0.8333333333333334,
+          "direct_auroc": 0.9421820010055305,
+          "jepa": 0.8333333333333334,
+          "jepa_auroc": 0.9034690799396682,
+          "jepa_oracle": 0.9583333333333334,
+          "jepa_oracle_auroc": 1.0,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9322942852354617,
+          "random": 0.203125,
+          "best_possible": 0.9583333333333334
+        },
+        "by_kind_color": {
+          "n_decisions": 24,
+          "direct": 0.75,
+          "direct_auroc": 0.8852019440254735,
+          "jepa": 0.8333333333333334,
+          "jepa_auroc": 0.8897268309033015,
+          "jepa_oracle": 0.9583333333333334,
+          "jepa_oracle_auroc": 0.9991620579855874,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9322942852354617,
+          "random": 0.203125,
+          "best_possible": 0.9583333333333334
+        },
+        "latency_ms_per_decision": {
+          "direct": 6.667541980277747,
+          "jepa": 10.52712500677444
+        },
+        "predictor_mse": 0.10243945568799973,
+        "copy_initial_mse": 0.27831000089645386,
+        "predictor_cos": 0.9440865516662598,
+        "copy_initial_cos": 0.8568823337554932
+      },
+      "test": {
+        "n_decisions": 52,
+        "direct": 0.38461538461538464,
+        "direct_auroc": 0.7305595068752962,
+        "jepa": 0.5961538461538461,
+        "jepa_auroc": 0.8830804488699225,
+        "jepa_oracle": 0.75,
+        "jepa_oracle_auroc": 0.9731705389600127,
+        "state_ref": 0.7307692307692307,
+        "state_ref_auroc": 0.9328275644065118,
+        "random": 0.1778846153846154,
+        "best_possible": 0.8846153846153846,
+        "by_kind_position": {
+          "n_decisions": 26,
+          "direct": 0.4230769230769231,
+          "direct_auroc": 0.7513829619092777,
+          "jepa": 0.5769230769230769,
+          "jepa_auroc": 0.8746641378220326,
+          "jepa_oracle": 0.7307692307692307,
+          "jepa_oracle_auroc": 0.9562193772720089,
+          "state_ref": 0.7307692307692307,
+          "state_ref_auroc": 0.9328275644065118,
+          "random": 0.1778846153846154,
+          "best_possible": 0.8846153846153846
+        },
+        "by_kind_color": {
+          "n_decisions": 26,
+          "direct": 0.34615384615384615,
+          "direct_auroc": 0.7132922396080291,
+          "jepa": 0.6153846153846154,
+          "jepa_auroc": 0.8904694167852063,
+          "jepa_oracle": 0.7692307692307693,
+          "jepa_oracle_auroc": 0.9889363047257784,
+          "state_ref": 0.7307692307692307,
+          "state_ref_auroc": 0.9328275644065118,
+          "random": 0.1778846153846154,
+          "best_possible": 0.8846153846153846
+        },
+        "by_reserved_band": {
+          "n_decisions": 20,
+          "direct": 0.3,
+          "direct_auroc": 0.703076923076923,
+          "jepa": 0.5,
+          "jepa_auroc": 0.857948717948718,
+          "jepa_oracle": 0.85,
+          "jepa_oracle_auroc": 0.9833333333333333,
+          "state_ref": 0.5,
+          "state_ref_auroc": 0.9158974358974359,
+          "random": 0.1875,
+          "best_possible": 0.9
+        },
+        "by_regular_band": {
+          "n_decisions": 32,
+          "direct": 0.4375,
+          "direct_auroc": 0.7598627787307033,
+          "jepa": 0.65625,
+          "jepa_auroc": 0.9000857632933104,
+          "jepa_oracle": 0.6875,
+          "jepa_oracle_auroc": 0.9703044596912521,
+          "state_ref": 0.875,
+          "state_ref_auroc": 0.9493996569468267,
+          "random": 0.171875,
+          "best_possible": 0.875
+        },
+        "latency_ms_per_decision": {
+          "direct": 6.85183351743035,
+          "jepa": 10.769625485409051
+        },
+        "predictor_mse": 0.11980083584785461,
+        "copy_initial_mse": 0.27735644578933716,
+        "predictor_cos": 0.9332403540611267,
+        "copy_initial_cos": 0.8569917678833008
+      }
+    }
+  ],
+  "summary": {
+    "val": {
+      "n_decisions": 48,
+      "direct": [
+        0.771,
+        0.045
+      ],
+      "direct_auroc": [
+        0.921,
+        0.01
+      ],
+      "position": {
+        "direct": 0.806,
+        "jepa": 0.889,
+        "jepa_oracle": 0.958,
+        "state_ref": 0.875,
+        "random": 0.203,
+        "best_possible": 0.958
+      },
+      "color": {
+        "direct": 0.736,
+        "jepa": 0.847,
+        "jepa_oracle": 0.958,
+        "state_ref": 0.875,
+        "random": 0.203,
+        "best_possible": 0.958
+      },
+      "jepa": [
+        0.868,
+        0.026
+      ],
+      "jepa_auroc": [
+        0.892,
+        0.007
+      ],
+      "jepa_oracle": [
+        0.958,
+        0.0
+      ],
+      "jepa_oracle_auroc": [
+        1.0,
+        0.0
+      ],
+      "state_ref": [
+        0.875,
+        0.0
+      ],
+      "state_ref_auroc": [
+        0.932,
+        0.0
+      ],
+      "random": [
+        0.203,
+        0.0
+      ],
+      "best_possible": [
+        0.958,
+        0.0
+      ],
+      "predictor_mse": 0.1021,
+      "copy_initial_mse": 0.2783,
+      "predictor_cos": 0.9442,
+      "copy_initial_cos": 0.8569,
+      "latency_ms": {
+        "direct": 6.84,
+        "jepa": 11.12
+      }
+    },
+    "test": {
+      "n_decisions": 52,
+      "direct": [
+        0.417,
+        0.059
+      ],
+      "direct_auroc": [
+        0.741,
+        0.023
+      ],
+      "position": {
+        "direct": 0.436,
+        "jepa": 0.513,
+        "jepa_oracle": 0.551,
+        "state_ref": 0.731,
+        "random": 0.178,
+        "best_possible": 0.885
+      },
+      "color": {
+        "direct": 0.397,
+        "jepa": 0.679,
+        "jepa_oracle": 0.808,
+        "state_ref": 0.731,
+        "random": 0.178,
+        "best_possible": 0.885
+      },
+      "jepa": [
+        0.596,
+        0.0
+      ],
+      "jepa_auroc": [
+        0.859,
+        0.021
+      ],
+      "jepa_oracle": [
+        0.679,
+        0.055
+      ],
+      "jepa_oracle_auroc": [
+        0.963,
+        0.008
+      ],
+      "state_ref": [
+        0.731,
+        0.0
+      ],
+      "state_ref_auroc": [
+        0.933,
+        0.0
+      ],
+      "random": [
+        0.178,
+        0.0
+      ],
+      "best_possible": [
+        0.885,
+        0.0
+      ],
+      "predictor_mse": 0.1177,
+      "copy_initial_mse": 0.2774,
+      "predictor_cos": 0.9344,
+      "copy_initial_cos": 0.857,
+      "latency_ms": {
+        "direct": 7.12,
+        "jepa": 11.33
+      }
+    }
+  }
+}

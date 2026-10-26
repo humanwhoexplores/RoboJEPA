@@ -1,0 +1,66 @@
+{
+  "n_trajectories": 640,
+  "n_scenes": 80,
+  "label_mismatches": 0,
+  "bad_physics": [],
+  "contact_rate_by_type": {
+    "ideal_left": 1.0,
+    "ideal_right": 1.0,
+    "miss": 0.0,
+    "over_left": 1.0,
+    "over_right": 1.0,
+    "random": 1.0,
+    "short_left": 1.0,
+    "short_right": 1.0
+  },
+  "split_trajectories": {
+    "train": 440,
+    "test": 104,
+    "val": 96
+  },
+  "success_rate": {
+    "success_left": 0.195,
+    "success_right": 0.175,
+    "success_red": 0.191,
+    "success_blue": 0.18
+  },
+  "success_by_type": {
+    "success_left": {
+      "ideal_left": 0.838,
+      "ideal_right": 0.0,
+      "miss": 0.0,
+      "over_left": 0.388,
+      "over_right": 0.0,
+      "random": 0.05,
+      "short_left": 0.288,
+      "short_right": 0.0
+    },
+    "success_right": {
+      "ideal_left": 0.0,
+      "ideal_right": 0.8,
+      "miss": 0.0,
+      "over_left": 0.0,
+      "over_right": 0.25,
+      "random": 0.05,
+      "short_left": 0.0,
+      "short_right": 0.3
+    }
+  },
+  "outcome_modes_per_instruction": {
+    "insufficient": 401,
+    "success": 237,
+    "wrong_target": 237,
+    "missed_contact": 160,
+    "off_course": 159,
+    "overshoot": 86
+  },
+  "left_color_red_fraction": 0.512,
+  "determinism_max_abs_diff": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "errors": []
+}
