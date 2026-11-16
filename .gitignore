@@ -222,4 +222,6 @@ __marimo__/
 # project
 data/
 features/
+features_v4/
+runs_v4/
 runs/
