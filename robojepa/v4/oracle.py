@@ -129,6 +129,12 @@ class CachedText:
         return torch.from_numpy(h).to(self.device), pad.to(self.device)
 
 
+def split_names(feat_dir):
+    """Splits of a feature cache: <feat_dir>/splits.json (v5) or v4's four. The first is the training split."""
+    p = f"{feat_dir}/splits.json"
+    return json.load(open(p)) if os.path.exists(p) else ["train", "val", "test_id", "test"]
+
+
 def label_subset(sp, frac, seed=0):
     """Positive (goal, push) pairs and the goal pool of a fixed random fraction of training scenes
     (data-efficiency runs); frac 1 keeps everything."""
@@ -264,7 +270,7 @@ def main():
 
     model.load_state_dict(torch.load(f"{a.out}/scorer.pt"))
     results = {}
-    for split in ("val", "test_id", "test"):
+    for split in split_names(a.features)[1:]:
         sp = V4Split(a.features, split, dev, on_gpu)
         goals = np.flatnonzero(sp.meta["g_eval"])
         rows = evaluate(score_decisions(model, sp, text, goals), sp, goals)

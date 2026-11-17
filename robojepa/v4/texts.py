@@ -23,8 +23,9 @@ def main():
     a = ap.parse_args()
     sys.path.insert(0, a.code)
     from gen_v3.language import instruction
+    from robojepa.v4.oracle import split_names
 
-    for split in ("train", "val", "test_id", "test"):
+    for split in split_names(a.features):
         m = np.load(f"{a.features}/{split}_meta.npz")
         k = K_TRAIN if split == "train" else 1
         out, scenes = [], {}

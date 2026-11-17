@@ -6,8 +6,8 @@ FEAT_DIM, N_TOK, TEXT_DIM, ACT_DIM, MAX_PUSH = 384, 256, 384, 4, 2
 ACT_SCALE = 5.0  # push coords are in meters, roughly +-0.3
 
 
-def _encoder(d, layers, heads):
-    layer = nn.TransformerEncoderLayer(d, heads, 4 * d, dropout=0.0, batch_first=True, norm_first=True)
+def _encoder(d, layers, heads, dropout=0.0):
+    layer = nn.TransformerEncoderLayer(d, heads, 4 * d, dropout=dropout, batch_first=True, norm_first=True)
     return nn.TransformerEncoder(layer, layers, enable_nested_tensor=False)
 
 
@@ -66,9 +66,9 @@ class TokenScorer(nn.Module):
     Unlike Scorer, the instruction is not pooled into one vector, so word order and words such as
     left/right survive and each word can attend to image patches."""
 
-    def __init__(self, text_dim=TEXT_DIM, d=256, layers=4, heads=8, max_text=64, two_frame=False):
+    def __init__(self, text_dim=TEXT_DIM, d=256, layers=4, heads=8, max_text=64, two_frame=False, feat_dim=FEAT_DIM):
         super().__init__()
-        self.inp = nn.Linear(FEAT_DIM, d)
+        self.inp = nn.Linear(feat_dim, d)  # feat_dim 1664: V-JEPA 2.1 ViT-G tokens (RoboJEPA)
         self.pos = nn.Parameter(torch.randn(1, N_TOK, d) * 0.02)
         self.txt = nn.Linear(text_dim, d)
         self.txt_pos = nn.Parameter(torch.randn(1, max_text, d) * 0.02)
@@ -118,7 +118,7 @@ class DirectTokenClassifier(nn.Module):
     """Start patch tokens + one push + instruction TOKEN sequence -> success logit (no future prediction).
     The token-text counterpart of DirectClassifier, with the same text pathway as TokenScorer."""
 
-    def __init__(self, text_dim=TEXT_DIM, d=256, layers=10, heads=8, max_text=64):
+    def __init__(self, text_dim=TEXT_DIM, d=256, layers=10, heads=8, max_text=64, dropout=0.0, token_drop=0.0):
         super().__init__()
         self.inp = nn.Linear(FEAT_DIM, d)
         self.pos = nn.Parameter(torch.randn(1, N_TOK, d) * 0.02)
@@ -126,12 +126,16 @@ class DirectTokenClassifier(nn.Module):
         self.txt = nn.Linear(text_dim, d)
         self.txt_pos = nn.Parameter(torch.randn(1, max_text, d) * 0.02)
         self.cls = nn.Parameter(torch.randn(1, 1, d) * 0.02)
-        self.body = _encoder(d, layers, heads)
+        self.body = _encoder(d, layers, heads, dropout)
         self.head = nn.Sequential(nn.LayerNorm(d), nn.Linear(d, 1))
+        self.token_drop = token_drop  # training only: hide this fraction of image patches (augmentation)
 
     def forward(self, z, a, text, text_pad):
         B, L = text_pad.shape
         a = self.act(a * ACT_SCALE).unsqueeze(1)
         h = torch.cat([self.cls.expand(B, -1, -1), a, self.txt(text) + self.txt_pos[:, :L], self.inp(z) + self.pos], 1)
-        pad = torch.cat([text_pad.new_zeros(B, 2), text_pad, text_pad.new_zeros(B, N_TOK)], 1)
+        img_pad = text_pad.new_zeros(B, N_TOK)
+        if self.training and self.token_drop > 0:
+            img_pad = torch.rand(B, N_TOK, device=z.device) < self.token_drop
+        pad = torch.cat([text_pad.new_zeros(B, 2), text_pad, img_pad], 1)
         return self.head(self.body(h, src_key_padding_mask=pad)[:, 0]).squeeze(-1)

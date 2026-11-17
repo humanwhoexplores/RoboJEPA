@@ -21,7 +21,7 @@ import torch
 import torch.nn.functional as F
 
 from robojepa.models import DirectTokenClassifier, Predictor, TokenScorer
-from robojepa.v4.oracle import N_CAND, TokenText, V4Split, evaluate, label_subset, summarize
+from robojepa.v4.oracle import N_CAND, TokenText, V4Split, evaluate, label_subset, split_names, summarize
 
 T5 = "google-t5/t5-base"
 
@@ -85,6 +85,9 @@ def main():
     ap.add_argument("--bs", type=int, default=None, help="default: predictor 64, direct 256")
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--dropout", type=float, default=0.0, help="direct: transformer dropout")
+    ap.add_argument("--token_drop", type=float, default=0.0, help="direct: fraction of image patches hidden in training")
+    ap.add_argument("--wd", type=float, default=0.05)
     a = ap.parse_args()
     kind = a.model
     bs = a.bs or (64 if kind == "predictor" else 256)
@@ -102,7 +105,7 @@ def main():
     pos, pool = label_subset(train, a.scene_frac)
     scenes = np.unique(train.scene[pool])  # predictor: these scenes' pushes (labels unused)
     val_goals = np.flatnonzero(val.meta["g_eval"])
-    model = (DirectTokenClassifier(text.dim, layers=a.layers or 10) if kind == "direct"
+    model = (DirectTokenClassifier(text.dim, layers=a.layers or 10, dropout=a.dropout, token_drop=a.token_drop) if kind == "direct"
              else Predictor(layers=a.layers or 6)).to(dev)
     if kind == "scorer_ft" or a.eval_only and kind == "predictor":
         model.load_state_dict(torch.load(a.predictor))
@@ -110,7 +113,7 @@ def main():
         model.requires_grad_(False)
     train_mod = scorer if kind == "scorer_ft" else model
     save = lambda: torch.save(train_mod.state_dict(), f"{a.out}/model.pt")
-    opt = torch.optim.AdamW(train_mod.parameters(), lr=a.lr, weight_decay=0.05)
+    opt = torch.optim.AdamW(train_mod.parameters(), lr=a.lr, weight_decay=a.wd)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, a.lr, total_steps=a.steps, pct_start=0.05)
     os.makedirs(a.out, exist_ok=True)
     print(f"{kind}: {sum(p.numel() for p in train_mod.parameters()) / 1e6:.2f}M params, {len(scenes)} train scenes "
@@ -179,7 +182,7 @@ def main():
     train_mod.load_state_dict(torch.load(f"{a.out}/model.pt"))
     kind = "predictor" if kind == "scorer_ft" else kind
     results = {}
-    for split in ("val", "test_id", "test"):
+    for split in split_names(a.features)[1:]:
         sp = V4Split(a.features, split, dev)
         goals = np.flatnonzero(sp.meta["g_eval"])
         sc, cos = score_decisions(kind, model, scorer, sp, text, goals)
