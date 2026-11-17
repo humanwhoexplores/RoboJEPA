@@ -207,14 +207,64 @@ def score_decisions(model, scorer, sp, text, goals, oracle_sub=False):
     return torch.stack(out).cpu().numpy()
 
 
+@torch.no_grad()
+def oracle_val(scorer, sp, text, goals):
+    """Scorer on TRUE finals, ranked among the cached pushes of each decision only (decisions with a positive
+    and a negative among them). Returns mean AUC, top-1, random top-1."""
+    from robojepa.train import auc
+    scorer.eval()
+    K, aucs, top, rnd = sp.sub.shape[1], [], [], []
+    for g in goals:
+        s = int(sp.g.scene[g])
+        lab = sp.g.lab[g, sp.sub[s]]
+        if not 0 < lab.sum() < K:
+            continue
+        t = [x.expand(K, *x.shape[1:]) for x in text(sp.g, g)]
+        with torch.autocast(DEV_TYPE[0], dtype=torch.bfloat16):
+            y = scorer(sp.frames(np.full(K, s), np.arange(K), t=3), *t, z0=sp.start(np.full(K, s))).float().cpu().numpy()
+        aucs.append(auc(y, lab)), top.append(lab[np.argmax(y)]), rnd.append(lab.mean())
+    scorer.train()
+    return float(np.mean(aucs)), float(np.mean(top)), float(np.mean(rnd))
+
+
+def chan_stats(rj_dir, n=2000, seed=0):
+    """Per-channel mean/std of ViT-G tokens (training start + cached final frames). Some channels carry offsets up
+    to ~8 against a median spread of ~0.4; the scorer trains much better on standardized input."""
+    path = f"{rj_dir}/chan_stats.npz"
+    if not os.path.exists(path):
+        rng = np.random.default_rng(seed)
+        seq = np.load(f"{rj_dir}/train_seq_z.npy", mmap_mode="r")
+        ss = np.load(f"{rj_dir}/train_seq_scale.npy", mmap_mode="r")
+        i, j = rng.integers(seq.shape[0], size=n), rng.integers(seq.shape[1], size=n)
+        z = np.concatenate([seq[a, b, 3].astype(np.float32) * ss[a, b, 3][:, None].astype(np.float32)
+                            for a, b in zip(i[:400], j[:400])])
+        np.savez(path, mu=z.mean(0), sd=z.std(0))
+    m = np.load(path)
+    return torch.from_numpy(m["mu"]), torch.from_numpy(m["sd"])
+
+
+class NormScorer(torch.nn.Module):
+    """TokenScorer on per-channel standardized ViT-G tokens (see chan_stats)."""
+
+    def __init__(self, text_dim, mu, sd):
+        super().__init__()
+        self.inner = TokenScorer(text_dim, layers=4, two_frame=True, feat_dim=C)
+        self.register_buffer("mu", mu.float()), self.register_buffer("sd", sd.float().clamp_min(1e-3))
+        self.two_frame = True
+
+    def forward(self, z, text, text_pad, z0=None):
+        n = lambda x: (x.float() - self.mu) / self.sd
+        return self.inner(n(z), text, text_pad, z0=n(z0))
+
+
 class Direct(torch.nn.Module):
     """Pretrained RoboJEPA predictor rolled out from the start frame + a TokenScorer head on (start, last
     predicted frame) + instruction; trained end to end on success labels only."""
 
-    def __init__(self, wm, text_dim):
+    def __init__(self, wm, text_dim, mu, sd):
         super().__init__()
         self.wm = wm
-        self.head = TokenScorer(text_dim, layers=4, two_frame=True, feat_dim=C)
+        self.head = NormScorer(text_dim, mu, sd)
 
     def forward(self, z0, a, s, text, pad):
         fin = rollout(self.wm, z0, a, s, detach=False)[:, -1]
@@ -281,11 +331,11 @@ def main():
     if a.mode in ("wm", "scorer_ft", "direct", "eval"):
         wm = get_wm()
     if a.mode in ("scorer", "scorer_ft", "eval"):
-        scorer = TokenScorer(text.dim, layers=4, two_frame=True, feat_dim=C).to(dev)
+        scorer = NormScorer(text.dim, *chan_stats(a.rj)).to(dev)
         if a.mode != "scorer":
             scorer.load_state_dict(torch.load(a.scorer))
     if a.mode == "direct":
-        model = Direct(wm, text.dim).to(dev)
+        model = Direct(wm, text.dim, *chan_stats(a.rj)).to(dev)
         train_mod = model
     else:
         model = wm
@@ -310,8 +360,8 @@ def main():
             tf, ro, cos, cp = wm_val(wm, val)
             return -ro, f"tf L1 {tf:.4f}  rollout L1 {ro:.4f} (copy-start {cp:.4f})  cos {cos:.4f}"
         if a.mode == "scorer":
-            v = summarize(evaluate(score_decisions(None, scorer, val, text, val_goals, oracle_sub=True), val.g, val_goals))
-            return v["top1"], f"val(cached pushes) top1 {v['top1']:.3f} auc {v['auc']:.3f}"
+            au, top, rnd = oracle_val(scorer, val, text, val_goals)
+            return au, f"val(cached pushes only) auc {au:.3f} top1 {top:.3f} (random {rnd:.3f})"
         sc = score_decisions(wm, scorer, val, text, val_goals) if a.mode == "scorer_ft" else \
             score_decisions(model, None, val, text, val_goals)
         v = summarize(evaluate(sc, val.g, val_goals))
