@@ -31,7 +31,7 @@ from robojepa.v4.oracle import N_CAND, TokenText, evaluate, label_subset, split_
 
 T5 = "google-t5/t5-base"
 C, HW, T_STEPS = 1664, 16, 4
-RJ = os.path.expanduser("~/Public/robo_jepa")
+RJ = os.environ.get("ROBO_JEPA", os.path.expanduser("~/Public/robo_jepa"))
 DEV_TYPE = ["cuda"]  # autocast device type (set from --device)
 
 

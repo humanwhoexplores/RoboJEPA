@@ -85,13 +85,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default="data/v5")
     ap.add_argument("--encoder", required=True, help="target-encoder state dict (see extract_encoder below)")
-    ap.add_argument("--robo_jepa", default=os.path.expanduser("~/Public/robo_jepa"))
+    ap.add_argument("--robo_jepa", default=os.environ.get("ROBO_JEPA", os.path.expanduser("~/Public/robo_jepa")))
     ap.add_argument("--out", default="features_rj")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--k", type=int, default=None, help="override sequences per scene (smoke test)")
     ap.add_argument("--device", default="cuda")
+    ap.add_argument("--code", default=".", help="folder containing gen_v5/ (repo root)")
     a = ap.parse_args()
-    sys.path.insert(0, os.path.expanduser("~/Public/RoboJEPA-v5"))
+    sys.path.insert(0, a.code)
     from gen_v5.video import read_mp4
     os.makedirs(a.out, exist_ok=True)
     dev = a.device

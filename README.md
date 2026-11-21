@@ -1,5 +1,7 @@
 # RoboJEPA
 
+> **Current work (v5 Panda dataset, scratch JEPA vs direct, pretrained RoboJEPA): see [README_v5.md](README_v5.md).**
+
 Language-guided push selection with a JEPA-style world model vs. a direct classifier
 (CSE590 project). A Panda arm in robosuite pushes a cube toward one of two colored regions;
 instructions name the target by side ("left"/"right") or color ("blue"/"green"), and the

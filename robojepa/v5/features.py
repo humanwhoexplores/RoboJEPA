@@ -7,8 +7,8 @@ the v4 oracle / pilot code runs on it unchanged. Differences:
   * v5 renders 256 px; frames are resized to 224 (DINOv2-small, 16x16 patches) on the GPU.
   * meta gains `bad` (n_scenes, 64): pushes whose end effector left the commanded line by > 15 mm.
 
-    python -m robojepa.v5.features --data data/v5 --code ../RoboJEPA-v5 --out features_v5
-    python -m robojepa.v4.texts --data data/v5 --code ../RoboJEPA-v5 --features features_v5
+    python -m robojepa.v5.features --data data/v5 --code . --out features_v5
+    python -m robojepa.v4.texts --data data/v5 --code . --features features_v5
 """
 import argparse
 import csv
@@ -39,7 +39,7 @@ class Resized(VisionEncoder):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default="data/v5")
-    ap.add_argument("--code", default="../RoboJEPA-v5", help="folder containing gen_v3/ (reference rule)")
+    ap.add_argument("--code", default=".", help="folder containing gen_v3/ (reference rule)")
     ap.add_argument("--out", default="features_v5")
     ap.add_argument("--limit", type=int, default=None, help="first N scenes per split (smoke test)")
     a = ap.parse_args()
