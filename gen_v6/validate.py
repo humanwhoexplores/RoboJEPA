@@ -125,7 +125,7 @@ def main():
             actions.append(meta["candidate"]["action"])
             physics(z, tid, acc)
             rec = label_sets(goals, log_of(z), spec, S0)
-            finals[tid] = z
+            finals[tid] = last_state(z)  # keep arrays, not the open file: macOS allows ~10k open files
             for name, key in zip(LABELS, ("goal_labels", "goal_labels_state", "goal_labels_strict")):
                 if not (np.array_equal(rec[name], z[key]) and np.array_equal(rec[name], lab[name][k])):
                     acc["mismatch"].append((tid, name))
@@ -148,7 +148,7 @@ def main():
         z = np.load(root / "steps" / f"{r.traj_id}.npz")
         meta = json.loads(str(z["meta"]))
         physics(z, r.traj_id, acc)
-        start = last_state(finals[r.step1_traj_id])
+        start = dict(finals[r.step1_traj_id])
         multi = {g["goal_id"]: g for g in d["multi_step"]}[r.decision]
         target = multi["parts"][0] if multi["type"] == "probe" else multi
         goals2 = d["goals"] + ([target] if target["goal_id"] not in {g["goal_id"] for g in d["goals"]} else [])
@@ -211,7 +211,7 @@ def main():
         tid = f"{sid}_c{k:02d}"
         with tempfile.TemporaryDirectory() as tmp:
             res = run_rollout(env, spec, state0, stored[k], d["goals"], S0, Path(tmp) / "det.mp4")
-        z = finals[tid]
+        z = np.load(root / "trajs" / f"{tid}.npz")
         diff = float(np.abs(res[0]["obj_pos"] - z["obj_pos"]).max()) if res and len(res[0]["obj_pos"]) == len(z["obj_pos"]) else 1.0
         det.append(diff)
     report["determinism_max_diff_m"] = max(det) if det else None

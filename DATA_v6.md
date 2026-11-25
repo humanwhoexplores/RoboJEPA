@@ -38,8 +38,12 @@ MuJoCo 3.3.7, robosuite 1.5.2, numpy 1.26.4, Python 3.11, macOS (MUJOCO_GL=cgl),
 
 Every batch passed `gen_v6.validate --determinism 2 --resample 1` ("passed": true, no errors) on
 both halves. Batches were validated as two 100-scene views (`scripts/v6/split_view.py`) because the
-validator keeps every trajectory file open and a 200-scene batch (12,800 files) exceeds macOS's
+validator then kept every trajectory file open and a 200-scene batch (12,800 files) exceeds macOS's
 10,240 open files per process. The checks are per scene, so the halves cover the whole batch.
+
+`gen_v6/validate.py` has since been fixed to keep only each rollout's final state, so a whole batch
+(or all 1,200 scenes) can be validated in one call and the split view is optional. The checks
+themselves are unchanged; `scripts/v6/run_batches.sh` still validates in halves, which also works.
 
 ## Code change during the run (read this)
 

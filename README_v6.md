@@ -1,7 +1,8 @@
 # v6: gripper actions, hidden physics and two-step decisions
 
-Status as of 2026-11-22: the generator is built and a 42-scene check (7 scenes per family) passed validation.
-The full run has not started yet. Run every command from the repository root.
+Status as of 2026-11-25: the full 1,200-scene run is done and every batch passed validation. Where the data is,
+how it was made and the known in_zone instruction gap are in [DATA_v6.md](DATA_v6.md). Section 5 is the earlier
+42-scene check. Run every command from the repository root.
 
 v6 answers the professor's feedback on v5 ("add diversity via actions, not just objects and distractors, like
 pick up and drop"). It keeps v4/v5's design: candidates are drawn goal-blind, every rollout is labeled against
