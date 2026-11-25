@@ -1,6 +1,8 @@
 # RoboJEPA
 
-> **Current work (v5 Panda dataset, scratch JEPA vs direct, pretrained RoboJEPA): see [README_v5.md](README_v5.md).**
+> **v6 dataset (1,200 scenes, gripper actions, hidden physics, two-step decisions): generator in [README_v6.md](README_v6.md), the generated data and run notes in [DATA_v6.md](DATA_v6.md).**
+>
+> **v5 Panda dataset, scratch JEPA vs direct, pretrained RoboJEPA: see [README_v5.md](README_v5.md).**
 
 Language-guided push selection with a JEPA-style world model vs. a direct classifier
 (CSE590 project). A Panda arm in robosuite pushes a cube toward one of two colored regions;
